@@ -31,7 +31,14 @@ router.get('/:id/departures', function(req, res) {
             var connection = {};
             connection.line = $('td[class=linie]')[i].children[0].data.replace(/(\r\n|\n|\r)/gm,"").replace(/\s+/g,"");
             connection.direction = $('td[class=richtung]')[i].children[0].data.replace(/(\r\n|\n|\r)/gm,"").replace(/\s+/g,"");
-            connection.departure = $('td[class=abfahrt]')[i].children[0].data.replace(/(\r\n|\n|\r)/gm,"").replace(/\s+/g,"");
+            var depart = $('td[class=abfahrt]')[i].children[0].data.replace(/(\r\n|\n|\r)/gm,"").replace(/\s+/g,"");
+            var hsplit  = depart.indexOf("h");
+            if(hsplit > -1){
+              connection.departure = depart.slice(0,hsplit + 1) + " " + depart.slice(hsplit + 1);
+            }
+            else {
+              connection.departure = depart;
+            }
             departures.push(connection);
           }
           res.send(departures);
